@@ -61,6 +61,16 @@ export const getScalar = (
       let value = 'string';
       let isEnum = false;
 
+      if (item.format === 'date' || item.format === 'date-time') {
+        return {
+          value: 'Date' + nullable,
+          isEnum: false,
+          type: 'string',
+          imports: [],
+          schemas: [],
+        };
+      }
+
       if (item.enum) {
         value = `'${item.enum.join(`' | '`)}'`;
         isEnum = true;

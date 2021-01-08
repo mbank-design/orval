@@ -1,5 +1,5 @@
 {
-  "name": "orval",
+  "name": "@mbank-design/orval",
   "description": "A swagger client generator for typescript",
   "version": "4.1.0",
   "license": "MIT",
@@ -44,8 +44,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "devDependencies": {
