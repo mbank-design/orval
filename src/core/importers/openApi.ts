@@ -30,10 +30,11 @@ const importSpecs = (
 
     return new Promise((resolve, reject) => {
       if (!schema.openapi || !schema.openapi.startsWith('3.0')) {
-        swagger2openapi.convertObj(schema, {}, (err, { openapi }) => {
+        swagger2openapi.convertObj(schema, {}, (err, callbackData) => {
           if (err) {
             reject(err);
           } else {
+            const { openapi } = callbackData;
             resolve(openapi);
           }
         });
@@ -41,8 +42,9 @@ const importSpecs = (
         resolve(schema);
       }
     });
-  } catch (e) {
-    throw 'Oups... 🍻. Parsing Error';
+  } catch (error) {
+    // parsing error
+    throw error;
   }
 };
 

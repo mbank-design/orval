@@ -1,8 +1,6 @@
 import React from 'react'
 import { users } from 'users'
 
-// const pinnedLogos = users.filter(p => p.pinned)
-
 export const ClientsMarquee = React.memo(props => {
   return (
     <div className="overflow-x-hidden">

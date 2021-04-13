@@ -75,7 +75,7 @@ export const getResReqTypes = (
           value: 'unknown',
           imports: [],
           schemas: [],
-          type: 'unknow',
+          type: 'unknown',
           isEnum: false,
         },
       ];

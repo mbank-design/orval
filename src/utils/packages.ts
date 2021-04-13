@@ -16,4 +16,4 @@ export type PackageJson = {
 };
 
 export const getPackage = () =>
-  require(join(__dirname, '../../package.json')) as PackageJson;
+  require(join(__dirname, '../package.json')) as PackageJson;

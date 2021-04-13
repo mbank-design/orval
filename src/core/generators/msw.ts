@@ -18,9 +18,12 @@ const getRoutePath = (path: string) => {
 };
 
 export const getRoute = (route: string) => {
-  const splittedRoute = route.split('/');
+  const routeParts = route.split('/');
 
-  return splittedRoute.reduce((acc, path) => {
+  // TODO: Move to configuration object
+  const REMOVE_VERSION_PART = true;
+
+  return (REMOVE_VERSION_PART ? routeParts.splice(1, routeParts.length) : routeParts).reduce((acc, path) => {
     if (!path) {
       return acc;
     }
@@ -68,7 +71,6 @@ export const generateMSW = (
     specs,
     override,
   );
-
   const route = getRoute(pathRoute);
   const mockData = getMockOptionsDataOverride(operationId, override);
 
@@ -90,13 +92,15 @@ export const generateMSW = (
       ? 'json'
       : 'text';
 
+
   return {
-    implementation: `rest.${verb}('${route}', (req, res, ctx) => {
+    implementation: `
+rest.${verb}('${route}', (req, res, ctx) => {
       return res(
         ctx.delay(1000),
         ctx.status(200, 'Mocked status'),${
-          value !== 'undefined' ? `\nctx.${responseType}(${value}),` : ''
-        }
+      value !== 'undefined' ? `\nctx.${responseType}(${value}),` : ''
+    }
       )
     }),`,
     imports,

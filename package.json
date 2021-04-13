@@ -1,7 +1,7 @@
 {
-  "name": "orval",
+  "name": "@mbank-design/orval",
   "description": "A swagger client generator for typescript",
-  "version": "4.2.1",
+  "version": "4.3.3",
   "license": "MIT",
   "files": [
     "lib"
@@ -32,61 +32,60 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anymaniax/orval"
+    "url": "https://github.com/mbank-design/orval"
   },
   "scripts": {
-    "rollup": "rollup -c rollup.config.js",
+    "rollup": "rollup --config rollup.config.js",
     "prebuild": "rimraf ./lib && mkdir lib",
     "build": "tsc && yarn rollup",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write 'src/**/*.{js,ts}'",
-    "release": "dotenv release-it"
+    "release": "dotenv release-it",
+    "releaseAndPublish": "yarn build && cp package.json lib/ && yarn publish --non-interactive --tag latest",
+    "publish:external": "yarn releaseAndPublish --use-yarnrc mbank-design.yarnrc && git push --follow-tags origin master",
+    "copy-to-project": "rm -rf $PROJECT_PATH/node_modules/@mbank-design/orval && mkdir -p $PROJECT_PATH/node_modules/@mbank-design/orval && cp -r package.json lib/* $PROJECT_PATH/node_modules/@mbank-design/orval",
+    "improved-audit": "yarn improved-yarn-audit"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
+    "hooks": {}
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "@release-it/conventional-changelog": "^2.0.0",
-    "@types/chalk": "^2.2.0",
-    "@types/commander": "^2.12.2",
-    "@types/faker": "^5.1.4",
-    "@types/inquirer": "^7.3.1",
-    "@types/lodash": "^4.14.165",
-    "@types/node": "^14.14.9",
-    "@types/request": "^2.48.4",
-    "@types/yamljs": "^0.2.30",
-    "@typescript-eslint/eslint-plugin": "^4.8.2",
-    "@typescript-eslint/parser": "^4.8.2",
-    "dotenv-cli": "^4.0.0",
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "faker": "^5.1.0",
-    "husky": "^4.2.3",
-    "lint-staged": "^10.5.2",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.2.0",
-    "release-it": "^14.2.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.33.3",
-    "rollup-plugin-typescript2": "^0.29.0",
-    "typescript": "^4.1.2"
+    "@types/chalk": "2.2.0",
+    "@types/commander": "2.12.2",
+    "@types/faker": "5.5.0",
+    "@types/inquirer": "7.3.1",
+    "@types/lodash": "4.14.168",
+    "@types/node": "14.14.37",
+    "@types/request": "2.48.5",
+    "@types/yamljs": "0.2.31",
+    "@typescript-eslint/eslint-plugin": "4.13.0",
+    "@typescript-eslint/parser": "4.13.0",
+    "dotenv-cli": "4.0.0",
+    "eslint": "7.17.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-prettier": "3.3.1",
+    "faker": "5.1.0",
+    "husky": "4.3.7",
+    "improved-yarn-audit": "2.3.2",
+    "lint-staged": "10.5.4",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.2.1",
+    "release-it": "14.5.1",
+    "rimraf": "3.0.2",
+    "rollup": "2.44.0",
+    "rollup-plugin-typescript2": "0.30.0",
+    "typescript": "4.2.3"
   },
   "dependencies": {
-    "axios": "^0.21.0",
-    "chalk": "^4.0.0",
-    "commander": "^6.2.0",
-    "cuid": "^2.1.8",
-    "ibm-openapi-validator": "^0.31.1",
-    "inquirer": "^7.0.6",
-    "lodash": "^4.17.15",
-    "openapi3-ts": "^2.0.0",
-    "swagger2openapi": "^7.0.4",
-    "yamljs": "^0.3.0"
+    "axios": "0.21.1",
+    "chalk": "4.1.0",
+    "commander": "6.2.0",
+    "cuid": "2.1.8",
+    "ibm-openapi-validator": "0.40.0",
+    "inquirer": "7.3.3",
+    "lodash": "4.17.20",
+    "openapi3-ts": "2.0.1",
+    "swagger2openapi": "7.0.5",
+    "yamljs": "0.3.0"
   }
 }

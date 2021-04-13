@@ -17,7 +17,7 @@ export const getResponse = (
           value: 'unknown',
           imports: [],
           schemas: [],
-          type: 'unknow',
+          type: 'unknown',
           isEnum: false,
         },
       ];

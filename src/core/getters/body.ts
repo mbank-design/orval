@@ -10,6 +10,7 @@ export const getBody = (
   operationId: string,
 ): GetterBody => {
   const allBodyTypes = getResReqTypes([['body', requestBody]], operationId);
+
   const imports = allBodyTypes.reduce<string[]>(
     (acc, { imports = [] }) => [...acc, ...imports],
     [],
@@ -20,6 +21,7 @@ export const getBody = (
   );
 
   const definition = allBodyTypes.map(({ value }) => value).join(' | ');
+  // Note: changing this to always use 'payload' breaks the generated client in some places
   const implementation =
     generalJSTypesWithArray.includes(definition) || allBodyTypes.length > 1
       ? 'payload'

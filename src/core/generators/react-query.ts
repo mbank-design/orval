@@ -267,9 +267,9 @@ const generateImports = ({
   ...(queryParams ? [queryParams.schema.name] : []),
 ];
 
-export const generateReactQueryTitle = () => '';
+export const generateReactQueryTitle = (title) => '';
 
-export const generateReactQueryHeader = () => `type AsyncReturnType<
+export const generateReactQueryHeader = (title) => `type AsyncReturnType<
 T extends (...args: any) => Promise<any>
 > = T extends (...args: any) => Promise<infer R> ? R : any;\n\n`;
 
