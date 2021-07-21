@@ -41,7 +41,7 @@
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write 'src/**/*.{js,ts}'",
     "release": "dotenv release-it",
-    "generate-api": "node ./dist/bin/orval.js --config ./samples/react-app-with-react-query/orval.config.js",
+    "generate-api": "node ./dist/bin/orval.js --config ./samples/react-app-with-react-query/orval.config.ts",
     "prepare": "husky install",
     "commitlint": "commitlint"
   },
@@ -84,6 +84,8 @@
     "commander": "^7.2.0",
     "cuid": "^2.1.8",
     "esutils": "2.0.3",
+    "debug": "^4.3.2",
+    "esbuild": "^0.11.20",
     "fs-extra": "^9.1.0",
     "ibm-openapi-validator": "^0.40.1",
     "inquirer": "^8.0.0",
