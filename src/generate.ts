@@ -4,7 +4,10 @@ import { writeSpecs } from './core/writers/specs';
 import { ExternalConfigFile, NormalizedOptions } from './types';
 import { catchError } from './utils/errors';
 import { loadFile } from './utils/file';
+<<<<<<< HEAD
 import { normalizeOptions } from './utils/options';
+=======
+>>>>>>> b275b7f (feat(generator): setup esbuild to load config and mutator)
 
 export const generateSpec = async (
   workspace: string,
