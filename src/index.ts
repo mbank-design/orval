@@ -1,7 +1,6 @@
 import { generateConfig, generateSpec } from './generate';
 import { Options } from './types';
 import { isString } from './utils/is';
-import { normalizeOptions } from './utils/options';
 
 const generate = (
   options?: string | Options,
@@ -12,7 +11,7 @@ const generate = (
     return generateConfig(options, projectName);
   }
 
-  return generateSpec(workspace, normalizeOptions(options), projectName);
+  return generateSpec(workspace, options, projectName);
 };
 
 export * from './types/generator';

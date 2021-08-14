@@ -5,13 +5,10 @@ import {
   GeneratorVerbOptions,
 } from '../../types/generator';
 import { pascal } from '../../utils/case';
-import { sanitize, toObjectString } from '../../utils/string';
+import { isObject } from '../../utils/is';
+import { sanitize, stringify, toObjectString } from '../../utils/string';
 import { generateVerbImports } from './imports';
-import {
-  generateMutatorConfig,
-  generateMutatorRequestOptions,
-  generateOptions,
-} from './options';
+import { generateMutatorConfig, generateOptions } from './options';
 
 const AXIOS_DEPENDENCIES: GeneratorDependency[] = [
   {
@@ -52,12 +49,12 @@ const generateAxiosImplementation = (
       isFormData,
     });
 
-    const isMutatorHasSecondArg = mutator.mutatorFn.length > 1;
     const requestOptions = isRequestOptions
-      ? generateMutatorRequestOptions(
-          override?.requestOptions,
-          isMutatorHasSecondArg,
-        )
+      ? isObject(override?.requestOptions)
+        ? ` // eslint-disable-next-line\n// @ts-ignore\n {${stringify(
+            override?.requestOptions,
+          )?.slice(1, -1)} ...options}`
+        : '// eslint-disable-next-line\n// @ts-ignore\n options'
       : '';
 
     return `const ${operationName} = <TData = ${

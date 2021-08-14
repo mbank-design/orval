@@ -112,10 +112,10 @@ export const generateMSW = async (
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),${
-            value && value !== 'undefined'
-              ? `\nctx.${responseType}(get${pascal(operationId)}Mock()),`
-              : ''
-          }
+        value && value !== 'undefined'
+          ? `\nctx.${responseType}(get${pascal(operationId)}Mock()),`
+          : ''
+      }
         )
       }),`,
     },

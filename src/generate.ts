@@ -1,14 +1,14 @@
-import { dirname } from 'upath';
+import { pathExists } from 'fs-extra';
+import { dirname, resolve } from 'upath';
 import { importSpecs } from './core/importers/specs';
 import { writeSpecs } from './core/writers/specs';
-import { ExternalConfigFile, NormalizedOptions } from './types';
+import { ExternalConfigFile, Options } from './types';
 import { catchError } from './utils/errors';
-import { loadFile } from './utils/file';
-import { normalizeOptions } from './utils/options';
+import { dynamicImport } from './utils/imports';
 
 export const generateSpec = async (
   workspace: string,
-  options: NormalizedOptions,
+  options: Options,
   projectName?: string,
 ) => {
   try {
@@ -20,23 +20,24 @@ export const generateSpec = async (
 };
 
 export const generateConfig = async (
-  configFile?: string,
+  path: string = './orval.config.js',
   projectName?: string,
 ) => {
-  const { path, file: config } = await loadFile<ExternalConfigFile>(
-    configFile,
-    {
-      defaultFileName: 'orval.config',
-    },
-  );
+  const fullPath = resolve(process.cwd(), path);
 
-  const workspace = dirname(path);
+  if (!(await pathExists(fullPath))) {
+    catchError('orval config not found');
+  }
+
+  const config = await dynamicImport<ExternalConfigFile>(fullPath);
+
+  const workspace = dirname(fullPath);
 
   if (projectName) {
     const project = config[projectName];
 
     if (project) {
-      generateSpec(workspace, normalizeOptions(project), projectName);
+      generateSpec(workspace, project, projectName);
     } else {
       catchError('Project not found');
     }
@@ -45,7 +46,7 @@ export const generateConfig = async (
 
   return Promise.all(
     Object.entries(config).map(([projectName, options]) =>
-      generateSpec(workspace, normalizeOptions(options), projectName),
+      generateSpec(workspace, options, projectName),
     ),
   );
 };

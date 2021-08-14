@@ -5,13 +5,10 @@ import {
   GeneratorVerbOptions,
 } from '../../types/generator';
 import { pascal } from '../../utils/case';
-import { sanitize, toObjectString } from '../../utils/string';
+import { isObject } from '../../utils/is';
+import { sanitize, stringify, toObjectString } from '../../utils/string';
 import { generateVerbImports } from './imports';
-import {
-  generateMutatorConfig,
-  generateMutatorRequestOptions,
-  generateOptions,
-} from './options';
+import { generateMutatorConfig, generateOptions } from './options';
 
 const ANGULAR_DEPENDENCIES: GeneratorDependency[] = [
   {
@@ -115,20 +112,18 @@ const generateImplementation = (
       isFormData,
     });
 
-    const isMutatorHasThirdArg = mutator.mutatorFn.length > 2;
     const requestOptions = isRequestOptions
-      ? generateMutatorRequestOptions(
-          override?.requestOptions,
-          isMutatorHasThirdArg,
-        )
+      ? isObject(override?.requestOptions)
+        ? ` // eslint-disable-next-line\n// @ts-ignore\n {${stringify(
+            override?.requestOptions,
+          )?.slice(1, -1)} ...options}`
+        : '// eslint-disable-next-line\n// @ts-ignore\n options'
       : '';
 
     return ` ${operationName}<TData = ${
       response.definition.success || 'unknown'
     }>(\n    ${toObjectString(props, 'implementation')}\n ${
-      isRequestOptions && isMutatorHasThirdArg
-        ? `options?: ThirdParameter<typeof ${mutator.name}>`
-        : ''
+      isRequestOptions ? `options?: ThirdParameter<typeof ${mutator.name}>` : ''
     }) {${isFormData ? body.formData : ''}
       return ${mutator.name}<TData>(
       ${mutatorConfig},

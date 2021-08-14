@@ -16,11 +16,7 @@ import { camel, pascal } from '../../utils/case';
 import { isObject } from '../../utils/is';
 import { stringify, toObjectString } from '../../utils/string';
 import { generateVerbImports } from './imports';
-import {
-  generateMutatorConfig,
-  generateMutatorRequestOptions,
-  generateOptions,
-} from './options';
+import { generateMutatorConfig, generateOptions } from './options';
 
 const AXIOS_DEPENDENCIES: GeneratorDependency[] = [
   {
@@ -116,18 +112,18 @@ const generateQueryRequestFunction = (
       isFormData,
     });
 
-    const isMutatorHasSecondArg = mutator.mutatorFn.length > 1;
     const requestOptions = isRequestOptions
-      ? generateMutatorRequestOptions(
-          override?.requestOptions,
-          isMutatorHasSecondArg,
-        )
+      ? isObject(override?.requestOptions)
+        ? ` // eslint-disable-next-line\n// @ts-ignore\n {${stringify(
+            override?.requestOptions,
+          )?.slice(1, -1)} ...options}`
+        : '// eslint-disable-next-line\n// @ts-ignore\n options'
       : '';
 
     return `export const ${operationName} = <TData = ${
       response.definition.success || 'unknown'
     }>(\n    ${toObjectString(props, 'implementation')}\n ${
-      isRequestOptions && isMutatorHasSecondArg
+      isRequestOptions
         ? `options?: SecondParameter<typeof ${mutator.name}>`
         : ''
     }) => {${isFormData ? body.formData : ''}
@@ -210,17 +206,17 @@ const generateQueryOptions = ({
 };
 
 const generateQueryArguments = ({
+  operationName,
   definitions,
   mutator,
   isRequestOptions,
-  isMutatorHasSecondArg,
   type,
 }: {
+  operationName: string;
   definitions: string;
   mutator?: GeneratorMutator;
   isRequestOptions: boolean;
   type?: QueryType;
-  isMutatorHasSecondArg: boolean;
 }) => {
   const definition = type
     ? `Use${pascal(type)}Options<TQueryFnData, TError, TData>`
@@ -235,9 +231,7 @@ const generateQueryArguments = ({
   return `options?: { ${type ? 'query' : 'mutation'}?:${definition}, ${
     !mutator
       ? `axios?: AxiosRequestConfig`
-      : isMutatorHasSecondArg
-      ? `request?: SecondParameter<typeof ${mutator.name}>`
-      : ''
+      : `request?: SecondParameter<typeof ${mutator.name}>`
   }}\n`;
 };
 
@@ -281,29 +275,23 @@ const generateQueryImplementation = ({
     ? `AxiosResponse<${response.definition.success || 'unknown'}>`
     : response.definition.success || 'unknown';
 
-  const isMutatorHasSecondArg = !!mutator && mutator.mutatorFn.length > 1;
-
   return `
 export const ${camel(
     `use-${name}`,
   )} = <TQueryFnData = AsyncReturnType<typeof ${operationName}, ${tData}>, TError = ${
     response.definition.errors || 'unknown'
   }, TData = TQueryFnData>(\n ${queryProps} ${generateQueryArguments({
+    operationName,
     definitions: '',
     mutator,
     isRequestOptions,
-    isMutatorHasSecondArg,
     type,
   })}\n  ) => {
 
   ${
     isRequestOptions
       ? `const {query: queryOptions${
-          !mutator
-            ? `, axios: axiosOptions`
-            : isMutatorHasSecondArg
-            ? ', request: requestOptions'
-            : ''
+          !mutator ? `, axios: axiosOptions` : ', request: requestOptions'
         }} = options || {}`
       : ''
   }
@@ -319,13 +307,7 @@ export const ${camel(
   }) => ${operationName}<TQueryFnData>(${httpFunctionProps}${
     httpFunctionProps ? ', ' : ''
   }${
-    isRequestOptions
-      ? !mutator
-        ? `axiosOptions`
-        : isMutatorHasSecondArg
-        ? 'requestOptions'
-        : ''
-      : ''
+    isRequestOptions ? (!mutator ? `axiosOptions` : 'requestOptions') : ''
   }), ${generateQueryOptions({
     params,
     options,
@@ -420,8 +402,6 @@ const generateQueryHook = (
     ? `AxiosResponse<${response.definition.success || 'unknown'}>`
     : response.definition.success || 'unknown';
 
-  const isMutatorHasSecondArg = !!mutator && mutator.mutatorFn.length > 1;
-
   return `
     export const ${camel(
       `use-${operationName}`,
@@ -429,7 +409,7 @@ const generateQueryHook = (
     TError = ${response.definition.errors || 'unknown'},
     ${!definitions ? `TVariables = void,` : ''}
     TContext = unknown>(${generateQueryArguments({
-      isMutatorHasSecondArg,
+      operationName,
       definitions,
       mutator,
       isRequestOptions,
@@ -437,11 +417,7 @@ const generateQueryHook = (
       ${
         isRequestOptions
           ? `const {mutation: mutationOptions${
-              !mutator
-                ? `, axios: axiosOptions`
-                : isMutatorHasSecondArg
-                ? ', request: requestOptions'
-                : ''
+              !mutator ? `, axios: axiosOptions` : ', request: requestOptions'
             }} = options || {}`
           : ''
       }
@@ -452,13 +428,7 @@ const generateQueryHook = (
         ${properties ? `const {${properties}} = props || {}` : ''};
 
         return  ${operationName}<TData>(${properties}${properties ? ',' : ''}${
-    isRequestOptions
-      ? !mutator
-        ? `axiosOptions`
-        : isMutatorHasSecondArg
-        ? 'requestOptions'
-        : ''
-      : ''
+    isRequestOptions ? (!mutator ? `axiosOptions` : 'requestOptions') : ''
   })
       }, mutationOptions)
     }
