@@ -45,7 +45,7 @@ export const getGithubSpecReq = ({
   ];
 };
 
-export const getGithubAcessToken = async (githubTokenPath: string) => {
+export const getGithubAccessToken = async (githubTokenPath: string) => {
   if (await pathExists(githubTokenPath)) {
     return readFile(githubTokenPath, 'utf-8');
   } else {
@@ -75,7 +75,7 @@ export const getGithubAcessToken = async (githubTokenPath: string) => {
 
 export const getGithubOpenApi = async (url: string): Promise<string> => {
   const githubTokenPath = join(__dirname, '.githubToken');
-  const accessToken = await getGithubAcessToken(githubTokenPath);
+  const accessToken = await getGithubAccessToken(githubTokenPath);
   const [info] = url.split('github.com/').slice(-1);
 
   const [owner, repo, , branch, ...paths] = info.split('/');

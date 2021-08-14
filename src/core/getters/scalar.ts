@@ -4,6 +4,16 @@ import { ResolverValue } from '../../types/resolvers';
 import { getArray } from './array';
 import { getObject } from './object';
 
+function getDateScalar(item: SchemaObject) {
+  return {
+    value: 'Date' + (item.nullable ? ' | null' : ''),
+    isEnum: false,
+    type: 'string',
+    imports: [],
+    schemas: [],
+  }
+}
+
 /**
  * Return the typescript equivalent of open-api data type
  *
@@ -21,6 +31,7 @@ export const getScalar = async ({
 }): Promise<ResolverValue> => {
   const nullable = item.nullable ? ' | null' : '';
 
+
   if (!item.type && item.items) {
     item.type = 'array';
   }
@@ -30,6 +41,10 @@ export const getScalar = async ({
     case 'integer': {
       let value = 'number';
       let isEnum = false;
+
+      if (item.format === 'date' || item.format === 'date-time') {
+        return getDateScalar(item);
+      }
 
       if (item.enum) {
         value = item.enum.join(' | ');
@@ -69,6 +84,10 @@ export const getScalar = async ({
     case 'string': {
       let value = 'string';
       let isEnum = false;
+
+      if (item.format === 'date' || item.format === 'date-time') {
+        return getDateScalar(item);
+      }
 
       if (item.enum) {
         value = `'${item.enum.join(`' | '`)}'`;

@@ -91,10 +91,10 @@ export const getMockObject = async ({
               ? key
               : `'${key}'`;
             if (!isRequired && !resolvedValue.overrided) {
-              return `${keyDefinition}: faker.helpers.randomize([${resolvedValue.value}, undefined])`;
+              return `'${keyDefinition}': faker.helpers.randomize([${resolvedValue.value}, undefined])`;
             }
 
-            return `${keyDefinition}: ${resolvedValue.value}`;
+            return `'${keyDefinition}': ${resolvedValue.value}`;
           },
         ),
       )

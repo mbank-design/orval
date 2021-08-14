@@ -24,9 +24,12 @@ const getRoutePath = (path: string) => {
 };
 
 export const getRoute = (route: string, baseUrl = '*') => {
-  const splittedRoute = route.split('/');
+  const routeParts = route.split('/');
 
-  return splittedRoute.reduce((acc, path) => {
+  // TODO: Move to configuration object
+  const REMOVE_VERSION_PART = true;
+
+  return (REMOVE_VERSION_PART ? routeParts.splice(1, routeParts.length) : routeParts).reduce((acc, path) => {
     if (!path) {
       return acc;
     }

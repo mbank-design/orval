@@ -1,5 +1,5 @@
 {
-  "name": "orval",
+  "name": "@mbank-design/orval",
   "description": "A swagger client generator for typescript",
   "version": "5.5.5",
   "license": "MIT",
@@ -35,17 +35,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anymaniax/orval"
+    "url": "https://github.com/mbank-design/orval"
   },
   "scripts": {
-    "build": "tsup ./src/bin/orval.ts ./src/index.ts --minify --clean --dts",
+    "build": "tsup ./src/bin/orval.ts ./src/index.ts --clean --dts",
     "dev": "tsup-node ./src/bin/orval.ts ./src/index.ts --clean --watch src --onSuccess 'yarn generate-api'",
+    "clean": "rimraf dist",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write 'src/**/*.{js,ts}'",
     "release": "dotenv release-it",
-    "generate-api": "node ./dist/bin/orval.js --config ./samples/react-app-with-react-query/orval.config.ts",
+    "generate-api": "node ./dist/bin/orval.js --config ./samples/react-app-with-react-query/orval.config.js",
     "prepare": "husky install",
-    "commitlint": "commitlint"
+    "commitlint": "commitlint",
+    "release-and-publish": "yarn build && cp package.json dist/ && yarn publish --non-interactive --tag latest",
+    "publish:external": "yarn release-and-publish --use-yarnrc mbank-design.yarnrc && git push --follow-tags origin master",
+    "copy-to-project": "rm -rf $PROJECT_PATH/node_modules/@mbank-design/orval && mkdir -p $PROJECT_PATH/node_modules/@mbank-design/orval && cp -r package.json node_modules dist $PROJECT_PATH/node_modules/@mbank-design/orval",
+    "improved-audit": "yarn improved-yarn-audit"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
@@ -89,7 +94,7 @@
     "debug": "^4.3.2",
     "esbuild": "^0.11.20",
     "fs-extra": "^9.1.0",
-    "ibm-openapi-validator": "0.40.1",
+    "ibm-openapi-validator": "^0.40.1",
     "inquirer": "^8.0.0",
     "lodash.get": "^4.4.2",
     "lodash.omitby": "^4.6.0",

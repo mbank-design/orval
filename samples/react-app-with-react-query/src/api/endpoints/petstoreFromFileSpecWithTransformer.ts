@@ -27,15 +27,24 @@ U = unknown
 > = T extends (...args: any) => Promise<infer R> ? (U extends R ? U : R) : any;
 
 
+type SecondParameter<T extends (...args: any) => any> = T extends (
+  config: any,
+  args: infer P,
+) => any
+  ? P
+  : never;
+
 export const listPets = <TData = Pets>(
     params?: ListPetsParams,
     version= 1,
- ) => {
+ options?: SecondParameter<typeof customInstance>) => {
       return customInstance<TData>(
       {url: `/v${version}/pets`, method: 'get',
         params,
     },
-      );
+      // eslint-disable-next-line
+// @ts-ignore
+ options);
     }
   
 
@@ -45,15 +54,15 @@ export const getListPetsQueryKey = (params?: ListPetsParams,
     
 export const useListPetsInfinite = <TQueryFnData = AsyncReturnType<typeof listPets, Pets>, TError = Error, TData = TQueryFnData>(
  params?: ListPetsParams,
-    version= 1, options?: { query?:UseInfiniteQueryOptions<TQueryFnData, TError, TData>, }
+    version= 1, options?: { query?:UseInfiniteQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ) => {
 
-  const {query: queryOptions} = options || {}
+  const {query: queryOptions, request: requestOptions} = options || {}
 
   const queryKey = queryOptions?.queryKey ?? getListPetsQueryKey(params,version);
 
-  const query = useInfiniteQuery<TQueryFnData, TError, TData>(queryKey, ({ pageParam }) => listPets<TQueryFnData>({ limit: pageParam, ...params },version, ), {enabled: !!(version), ...queryOptions} )
+  const query = useInfiniteQuery<TQueryFnData, TError, TData>(queryKey, ({ pageParam }) => listPets<TQueryFnData>({ limit: pageParam, ...params },version, requestOptions), {enabled: !!(version), ...queryOptions} )
 
   return {
     queryKey,
@@ -63,15 +72,15 @@ export const useListPetsInfinite = <TQueryFnData = AsyncReturnType<typeof listPe
 
 export const useListPets = <TQueryFnData = AsyncReturnType<typeof listPets, Pets>, TError = Error, TData = TQueryFnData>(
  params?: ListPetsParams,
-    version= 1, options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, }
+    version= 1, options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ) => {
 
-  const {query: queryOptions} = options || {}
+  const {query: queryOptions, request: requestOptions} = options || {}
 
   const queryKey = queryOptions?.queryKey ?? getListPetsQueryKey(params,version);
 
-  const query = useQuery<TQueryFnData, TError, TData>(queryKey, () => listPets<TQueryFnData>(params,version, ), {enabled: !!(version), ...queryOptions} )
+  const query = useQuery<TQueryFnData, TError, TData>(queryKey, () => listPets<TQueryFnData>(params,version, requestOptions), {enabled: !!(version), ...queryOptions} )
 
   return {
     queryKey,
@@ -82,12 +91,14 @@ export const useListPets = <TQueryFnData = AsyncReturnType<typeof listPets, Pets
 export const createPets = <TData = Pet>(
     createPetsBody: CreatePetsBody,
     version= 1,
- ) => {
+ options?: SecondParameter<typeof customInstance>) => {
       return customInstance<TData>(
       {url: `/v${version}/pets`, method: 'post',
       data: createPetsBody
     },
-      );
+      // eslint-disable-next-line
+// @ts-ignore
+ options);
     }
   
 
@@ -95,24 +106,26 @@ export const createPets = <TData = Pet>(
     export const useCreatePets = <TData = AsyncReturnType<typeof createPets,Pet>,
     TError = Error,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: CreatePetsBody;version?: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<TData, TError,{data: CreatePetsBody;version?: number}, TContext>, request?: SecondParameter<typeof customInstance>}
 ) => {
-      const {mutation: mutationOptions} = options || {}
+      const {mutation: mutationOptions, request: requestOptions} = options || {}
 
       return useMutation<TData, TError, {data: CreatePetsBody;version?: number}, TContext>((props) => {
         const {data,version} = props || {};
 
-        return  createPets<TData>(data,version,)
+        return  createPets<TData>(data,version,requestOptions)
       }, mutationOptions)
     }
     export const showPetById = <TData = Pet>(
     petId: string,
     version= 1,
- ) => {
+ options?: SecondParameter<typeof customInstance>) => {
       return customInstance<TData>(
       {url: `/v${version}/pets/${petId}`, method: 'get'
     },
-      );
+      // eslint-disable-next-line
+// @ts-ignore
+ options);
     }
   
 
@@ -122,15 +135,15 @@ export const getShowPetByIdQueryKey = (petId: string,
     
 export const useShowPetByIdInfinite = <TQueryFnData = AsyncReturnType<typeof showPetById, Pet>, TError = Error, TData = TQueryFnData>(
  petId: string,
-    version= 1, options?: { query?:UseInfiniteQueryOptions<TQueryFnData, TError, TData>, }
+    version= 1, options?: { query?:UseInfiniteQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ) => {
 
-  const {query: queryOptions} = options || {}
+  const {query: queryOptions, request: requestOptions} = options || {}
 
   const queryKey = queryOptions?.queryKey ?? getShowPetByIdQueryKey(petId,version);
 
-  const query = useInfiniteQuery<TQueryFnData, TError, TData>(queryKey, () => showPetById<TQueryFnData>(petId,version, ), {enabled: !!(version && petId), ...queryOptions} )
+  const query = useInfiniteQuery<TQueryFnData, TError, TData>(queryKey, () => showPetById<TQueryFnData>(petId,version, requestOptions), {enabled: !!(version && petId), ...queryOptions} )
 
   return {
     queryKey,
@@ -140,15 +153,15 @@ export const useShowPetByIdInfinite = <TQueryFnData = AsyncReturnType<typeof sho
 
 export const useShowPetById = <TQueryFnData = AsyncReturnType<typeof showPetById, Pet>, TError = Error, TData = TQueryFnData>(
  petId: string,
-    version= 1, options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, }
+    version= 1, options?: { query?:UseQueryOptions<TQueryFnData, TError, TData>, request?: SecondParameter<typeof customInstance>}
 
   ) => {
 
-  const {query: queryOptions} = options || {}
+  const {query: queryOptions, request: requestOptions} = options || {}
 
   const queryKey = queryOptions?.queryKey ?? getShowPetByIdQueryKey(petId,version);
 
-  const query = useQuery<TQueryFnData, TError, TData>(queryKey, () => showPetById<TQueryFnData>(petId,version, ), {enabled: !!(version && petId), ...queryOptions} )
+  const query = useQuery<TQueryFnData, TError, TData>(queryKey, () => showPetById<TQueryFnData>(petId,version, requestOptions), {enabled: !!(version && petId), ...queryOptions} )
 
   return {
     queryKey,

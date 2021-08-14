@@ -1,7 +1,9 @@
-import * as faker from 'faker';
-import { Options } from '../../dist';
+const faker = require('faker');
+/**
+ * Example config for `yarn example:advanced`
+ */
 
-const config: Record<string, Options> = {
+module.exports = {
 	petstore: {
 		output: {
 			mode: 'split',
@@ -49,5 +51,3 @@ const config: Record<string, Options> = {
 		}
 	}
 };
-
-export default config;

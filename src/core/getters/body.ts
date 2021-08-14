@@ -27,7 +27,7 @@ export const getBody = async (
   );
 
   const definition = allBodyTypes.map(({ value }) => value).join(' | ');
-
+  // Note: changing this to always use 'payload' breaks the generated client in some places
   const implementation =
     generalJSTypesWithArray.includes(definition.toLowerCase()) ||
     allBodyTypes.length > 1
