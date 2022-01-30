@@ -1,5 +1,5 @@
 {
-  "name": "orval",
+  "name": "@mbank-design/orval",
   "description": "A swagger client generator for typescript",
   "version": "6.9.0",
   "license": "MIT",
@@ -38,7 +38,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/anymaniax/orval"
+    "url": "https://github.com/mbank-design/orval"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "always-auth": true,
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup ./src/bin/orval.ts ./src/index.ts --minify --clean --dts --splitting",
@@ -53,7 +58,12 @@
     "generate-api": "node ./dist/bin/orval.js --config ./samples/react-query/basic/orval.config.ts --watch",
     "prepare": "husky install && cd ./samples/react-query/basic && yarn",
     "commitlint": "commitlint",
-    "update-samples": "zx ./scripts/update-samples.mjs"
+    "update-samples": "zx ./scripts/update-samples.mjs",
+    "clean": "rimraf dist",
+    "release-and-publish": "yarn build && cp package.json dist/ && yarn publish --non-interactive --tag latest",
+    "publish:external": "yarn release-and-publish && git push --follow-tags origin master",
+    "copy-to-project": "rm -rf $PROJECT_PATH/node_modules/@mbank-design/orval && mkdir -p $PROJECT_PATH/node_modules/@mbank-design/orval && cp -r package.json node_modules dist $PROJECT_PATH/node_modules/@mbank-design/orval",
+    "improved-audit": "yarn improved-yarn-audit"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
@@ -117,8 +127,16 @@
     "lodash.uniqby": "^4.7.0",
     "lodash.uniqwith": "^4.5.0",
     "micromatch": "^4.0.4",
+<<<<<<< HEAD
     "openapi3-ts": "^2.0.2",
+<<<<<<< HEAD
     "string-argv": "^0.3.1",
+=======
+=======
+    "openapi3-ts": "^2.0.1",
+    "openapi-types": "9.3.0",
+>>>>>>> bf94809 (feat: Allow dates to be deserialized as JavaScript Date objects)
+>>>>>>> 8f5bcfd (feat: Allow dates to be deserialized as JavaScript Date objects)
     "swagger2openapi": "^7.0.8",
     "tsconfck": "^2.0.1",
     "upath": "^2.0.1",
