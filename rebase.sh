@@ -1,5 +1,6 @@
 git checkout master
-git pull orval master
-git checkout next-mbank-2
+git pull upstream master
+git checkout mbank
 git rebase master
-git fp
+git push origin master
+git push origin mbank --force
