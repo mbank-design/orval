@@ -6,6 +6,17 @@ import { escape } from '../../utils/string';
 import { getArray } from './array';
 import { getObject } from './object';
 
+function getDateScalar(item: SchemaObject) {
+  return {
+    value: 'Date' + (item.nullable ? ' | null' : ''),
+    isEnum: false,
+    isRef: false,
+    type: 'string',
+    imports: [],
+    schemas: [],
+  }
+}
+
 /**
  * Return the typescript equivalent of open-api data type
  *
@@ -32,6 +43,10 @@ export const getScalar = async ({
     case 'integer': {
       let value = 'number';
       let isEnum = false;
+
+      if (item.format === 'date' || item.format === 'date-time') {
+        return getDateScalar(item);
+      }
 
       if (item.enum) {
         value = item.enum.join(' | ');
@@ -73,6 +88,10 @@ export const getScalar = async ({
     case 'string': {
       let value = 'string';
       let isEnum = false;
+
+      if (item.format === 'date' || item.format === 'date-time') {
+        return getDateScalar(item);
+      }
 
       if (item.enum) {
         value = `'${item.enum
