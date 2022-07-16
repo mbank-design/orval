@@ -127,16 +127,8 @@
     "lodash.uniqby": "^4.7.0",
     "lodash.uniqwith": "^4.5.0",
     "micromatch": "^4.0.4",
-<<<<<<< HEAD
     "openapi3-ts": "^2.0.2",
-<<<<<<< HEAD
     "string-argv": "^0.3.1",
-=======
-=======
-    "openapi3-ts": "^2.0.1",
-    "openapi-types": "9.3.0",
->>>>>>> bf94809 (feat: Allow dates to be deserialized as JavaScript Date objects)
->>>>>>> 8f5bcfd (feat: Allow dates to be deserialized as JavaScript Date objects)
     "swagger2openapi": "^7.0.8",
     "tsconfck": "^2.0.1",
     "upath": "^2.0.1",
