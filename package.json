@@ -117,7 +117,7 @@
     "execa": "^5.1.1",
     "find-up": "5.0.0",
     "fs-extra": "^10.0.1",
-    "globby": "11.0.4",
+    "globby": "13.1.2",
     "ibm-openapi-validator": "^0.83.0",
     "inquirer": "^8.2.0",
     "lodash.get": "^4.4.2",
