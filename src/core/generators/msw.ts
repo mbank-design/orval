@@ -85,7 +85,9 @@ export const generateMSW = (
           ctx.delay(${override?.mock?.delay ?? 1000}),
           ctx.status(200, 'Mocked status'),${
             value && value !== 'undefined'
-              ? `\nctx.${responseType}(get${pascal(operationId)}Mock()),`
+              ? `\nctx.${responseType}(get${pascal(operationId)}Mock()${
+                  responseType === 'text' ? '.toString()' : ''
+                }),`
               : ''
           }
         )
