@@ -26,3 +26,8 @@ You can find below some samples
 - [react app with swr](https://github.com/anymaniax/orval/tree/master/samples/react-app-with-swr)
 - [nx fastify react](https://github.com/anymaniax/orval/tree/master/samples/nx-fastify-react)
 - [angular app](https://github.com/anymaniax/orval/tree/master/samples/angular-app)
+
+
+### The reason why was `orval` forked to the `mbank-design` organization
+
+`orval` was forked to the organization mainly to enhance the handling of date format and generated response. Additionally there were added some quality of life scripts to `package.json` file.
